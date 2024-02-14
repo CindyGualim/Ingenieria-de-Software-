@@ -1,4 +1,4 @@
-Avances Design Thinking:
+#Avances Design Thinking:
 
 Se definió el Brief o tema de interés
 
