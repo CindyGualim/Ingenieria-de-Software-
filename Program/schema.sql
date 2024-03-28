@@ -27,3 +27,26 @@ CREATE TABLE IF NOT EXISTS messages(
     time_sent TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     id_user INT PRIMARY KEY NOT NULL
 )
+
+CREATE TABLE IF NOT EXISTS tag(
+    id INT PRIMARY KEY NOT NULL,
+    tagname VARCHAR(50) NOT NULL
+)
+
+CREATE TABLE IF NOT EXISTS course(
+    codecourse INT PRIMARY KEY NOT NULL, -- ID of the course
+    namecourse VARCHAR(100) NOT NULL
+)
+
+CREATE TABLE IF NOT EXISTS hoursdisponibility(
+    hournumber TIME NOT NULL, -- insert time in hh:mm:ss format
+    studentID INT NOT NULL
+)
+
+CREATE TABLE IF NOT EXISTS report(
+    id INT PRIMARY KEY NOT NULL,
+    comment TEXT NOT NULL,
+    is_ausent INT NOT NULL
+)
+
+
