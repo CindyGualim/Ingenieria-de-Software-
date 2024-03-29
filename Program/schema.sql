@@ -17,24 +17,24 @@ CREATE TABLE IF NOT EXISTS student(
 );
 
 CREATE TABLE IF NOT EXISTS chat(
-    id INT PRIMARY KEY NOT NULL,
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     chat_name VARCHAR(100)
 );
 
 CREATE TABLE IF NOT EXISTS messages(
-    id_message INT PRIMARY KEY NOT NULL,
+    id_message INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     content TEXT,
-    time_sent TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    id_user INT NOT NULL
+    id_user INT NOT NULL,
+    time_sent TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS tag(
-    id INT PRIMARY KEY NOT NULL,
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     tagname VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS course(
-    course_code INT PRIMARY KEY NOT NULL, -- ID of the course
+    course_code INT AUTO_INCREMENT PRIMARY KEY NOT NULL, -- ID of the course
     namecourse VARCHAR(100) NOT NULL
 );
 
@@ -47,13 +47,13 @@ CREATE TABLE IF NOT EXISTS hoursdisponibility(
 );
 
 CREATE TABLE IF NOT EXISTS report(
-    id INT PRIMARY KEY NOT NULL,
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     comment TEXT NOT NULL,
     id_session INT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS ausentReport(
-    id INT PRIMARY KEY NOT NULL,
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     comment TEXT NOT NULL,
     id_sender INT NOT NULL,
     id_ausentparty INT NOT NULL,
@@ -61,19 +61,19 @@ CREATE TABLE IF NOT EXISTS ausentReport(
 );
 
 CREATE TABLE IF NOT EXISTS sessionPlanned(
-    id INT PRIMARY KEY NOT NULL,
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     id_tutor INT NOT NULL,
     tutorNotes TEXT,
     course_code INT,
-    dated date NOT NULL,
+    dated date NOT NULL, -- format 'YY-MM-DD'
     start_hour TIME NOT NULL,
-    end_hour TIME NOT NULL, --check to end hour to not be less than start hour
+    end_hour TIME NOT NULL, -- check to end hour to not be less than start hour
     mode VARCHAR(50) NOT NULL, -- can be either VIRTUAL, PRESENCIAL, AMBOS
     CONSTRAINT CHK_hour CHECK (end_hour > start_hour)
 );
 
 CREATE TABLE IF NOT EXISTS comment(
-    id INT PRIMARY KEY NOT NULL,
+    id INT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     rating INT NOT NULL,
     commentContent TEXT,
     id_sender INT NOT NULL,
@@ -134,12 +134,14 @@ ALTER TABLE sessionPlanned ADD CONSTRAINT fk_session_coursetheme FOREIGN KEY (co
 
 ALTER TABLE comment ADD CONSTRAINT fk_comment_senderID FOREIGN KEY (id_sender) REFERENCES user(id);
 
+--m Relation tables constraints
 
 ALTER TABLE specialtyTutor ADD CONSTRAINT fk_specialty_userID FOREIGN KEY (id_tutor) REFERENCES user(id);
 ALTER TABLE specialtyTutor ADD CONSTRAINT fk_specialty_course FOREIGN KEY (course_code) REFERENCES course(course_code);
 
 ALTER TABLE chat_messages ADD CONSTRAINT fk_chatid FOREIGN KEY (id_chat) REFERENCES chat(id);
 ALTER TABLE chat_messages ADD CONSTRAINT fk_message_id FOREIGN KEY (id_message) REFERENCES messages(id_message);
+
 ALTER TABLE chat_integrants ADD CONSTRAINT fk_chat_id_integrant FOREIGN KEY (id_chat) REFERENCES chat(id);
 ALTER TABLE chat_integrants ADD CONSTRAINT fk_user_id_integrant FOREIGN KEY (id_integrant) REFERENCES user(id);
 
