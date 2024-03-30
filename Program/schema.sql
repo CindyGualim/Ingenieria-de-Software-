@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS sessionPlanned(
     course_code INT,
     dated date NOT NULL,
     start_hour TIME NOT NULL,
-    end_hour TIME NOT NULL, --check to end hour to not be less than start hour
+    end_hour TIME NOT NULL, -- check to end hour to not be less than start hour
     mode VARCHAR(50) NOT NULL, -- can be either VIRTUAL, PRESENCIAL, AMBOS
     CONSTRAINT CHK_hour CHECK (end_hour > start_hour)
 );
