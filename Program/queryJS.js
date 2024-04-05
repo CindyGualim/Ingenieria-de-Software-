@@ -13,7 +13,7 @@ async function crearPoolConexion() {
         connectionLimit: 10,
         queueLimit: 0,
         ssl: {
-            ca: readFileSync('C:\\Users\\cindy_7sr6dyy\\Downloads\\ca-certificate.crt')
+            ca: readFileSync('ca-certificate.crt')
         }
     });
 }
@@ -119,6 +119,43 @@ async function obtenerDisponibilidadEstudiantes() {
         }
     }
 }
+
+// Función principal para ejecutar comandos basados en argumentos
+async function main() {
+    const funcion = process.argv[2];
+    switch (funcion) {
+        case 'getSt':
+            await obtenerEstudiantes();
+            break;
+
+        case 'getchats':
+            const idChat = process.argv[3];
+            if (!idChat) {
+                console.log('Debes proporcionar el ID del chat como argumento.');
+                return;
+            }
+            await obtenerMensajesDeChat(idChat);
+            break;
+
+        case 'getsessions':
+            await obtenerSesionesPlanificadas();
+            break;
+
+        case 'getabsence':
+            await obtenerReportesDeAusencia();
+            break;
+            
+        case 'getavai':
+            await obtenerDisponibilidadEstudiantes();
+            break;
+            
+        default:
+            console.log('Función no reconocida. Asegúrate de que el nombre esté correcto.');
+    }
+}
+
+main().catch(err => console.error(err));
+
 
 export {
     obtenerEstudiantes,
