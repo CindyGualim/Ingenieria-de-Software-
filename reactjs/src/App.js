@@ -1,24 +1,29 @@
+// en esta pagina vamos a renderizar el login con los componentes. 
+import React from 'react';
 import './App.css';
+// importamos componentes.
+import Header from './components/Header';
+import Input from './components/Input';
+import Button from './components/Button';
 
-
+// se necesitan agregar las funciones de olvidarContra y agregarle el metodo onClick al boton para ingresar...
 function App() {
-  return (
-    <div>
+return (
+  <div>
+  <Header title="Sign In"></Header>
+  <div className='container' id='container'>
+    <div className='form-container sign-in'>
+      <form>
+        <span> Usea tu Correo y contraseña para ingresar </span>
+        <Input type="email" placeholder="Correo Electronico" />
+        <Input type="password" placeholder="Ingresa tu contraseña" />
+        <Button>Sign in</Button>
+      </form>
+    </div>
+  </div>
+  </div>
+);
 
-<div class="container" id="container">
-        <div class="form-container sign-in">
-            <form>
-                <h1>Sign In</h1>
-                <span>or use your email password</span>
-                <input type="email" placeholder="Email"></input>
-                <input type="password" placeholder="Password"></input>
-                <a href="#">Forget Your Password?</a>
-                <button>Sign In</button>
-            </form>
-        </div>
-    </div>
-    </div>
-  );
 }
 
-export default App;
+export default App; 
