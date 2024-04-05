@@ -5,6 +5,7 @@ import './App.css';
 import Header from './components/Header';
 import Input from './components/Input';
 import Button from './components/Button';
+import Footer from './components/Footer';
 
 // se necesitan agregar las funciones de olvidarContra y agregarle el metodo onClick al boton para ingresar...
 function App() {
@@ -21,6 +22,7 @@ return (
       </form>
     </div>
   </div>
+  <Footer /> 
   </div>
 );
 
