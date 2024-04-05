@@ -8,7 +8,7 @@ async function consultaUsuarios() {
         conexion = await createConnection({
             host: 'db-mysql-nyc3-74035-do-user-16199995-0.c.db.ondigitalocean.com',
             user: 'doadmin',
-            password: '',
+
             database: 'defaultdb',
             port: 25060,
             ssl: {
