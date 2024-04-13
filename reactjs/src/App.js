@@ -3,6 +3,7 @@ import './App.css';
 import Header from './components/Header';
 import Button from './components/Button';
 import Footer from './components/Footer';
+import Register from './Register';
 
 // Custom Input Component
 const Input = ({ type, placeholder, value, onChange }) => (
@@ -12,54 +13,37 @@ const Input = ({ type, placeholder, value, onChange }) => (
 function App() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showRegisterView, setShowRegisterView] = useState(false);  // Nuevo estado para controlar la visualización del registro
 
   const handleLogin = async (event) => {
-    event.preventDefault();
-    console.log("Attempting to login with:", { email, password }); // Log the credentials being sent
+    // ... tu función de inicio de sesión existente ...
+  };
 
-    try {
-      const response = await fetch('/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-
-      console.log("Server response:", response);
-
-      if (!response.ok) {
-        try {
-          const errorData = await response.json();
-          console.error('Server responded with:', errorData);
-          alert(`Login failed: ${errorData.message}`);
-        } catch (jsonError) {
-          const errorText = await response.text();
-          console.error('Server responded with non-JSON:', errorText);
-          alert(`Login failed: ${errorText}`);
-        }
-        return;  // Exit the function after handling the error
-      }
-
-      const data = await response.json();
-      console.log('Login Successful:', data);
-      alert('Login Successful!');
-    } catch (error) {
-      console.error('Login error:', error);
-      alert('Login failed: Unexpected error occurred.');
-    }
+  // Alternar entre la vista de inicio de sesión y registro
+  const toggleView = () => {
+    setShowRegisterView(!showRegisterView);
   };
 
   return (
     <div>
-      <Header title="Sign In" />
+      <Header title={showRegisterView ? "Registro" : "Iniciar Sesión"} />
       <div className='container' id='container'>
-        <div className='form-container sign-in'>
-          <form onSubmit={handleLogin}>
-            <span>Use your Email and Password to sign in</span>
-            <Input type="email" placeholder="Correo Electronico" value={email} onChange={e => setEmail(e.target.value)} />
-            <Input type="password" placeholder="Ingresa tu contraseña" value={password} onChange={e => setPassword(e.target.value)} />
-            <Button type="submit">Sign in</Button>
-          </form>
-        </div>
+        {showRegisterView ? (
+          // Vista de registro
+          <Register />
+        ) : (
+          // Vista de inicio de sesión
+          <div className='form-container sign-in'>
+            <form onSubmit={handleLogin}>
+              <span>Usa tu correo electrónico y contraseña para iniciar sesión</span>
+              <Input type="email" placeholder="Correo Electrónico" value={email} onChange={e => setEmail(e.target.value)} />
+              <Input type="password" placeholder="Ingresa tu contraseña" value={password} onChange={e => setPassword(e.target.value)} />
+              <Button type="submit">Iniciar Sesión</Button>
+            </form>
+            {/* Agregamos un botón para cambiar a la vista de registro */}
+            <button onClick={toggleView} className="toggle-view">Registrarse</button>
+          </div>
+        )}
       </div>
       <Footer />
     </div>
@@ -67,3 +51,5 @@ function App() {
 }
 
 export default App;
+
+
