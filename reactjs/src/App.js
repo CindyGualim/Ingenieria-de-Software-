@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import './App.css';
 import Header from './components/Header';
-import Input from './components/Input';
 import Button from './components/Button';
 import Footer from './components/Footer';
+
+// Custom Input Component
+const Input = ({ type, placeholder, value, onChange }) => (
+  <input type={type} placeholder={placeholder} value={value} onChange={onChange} />
+);
 
 function App() {
   const [email, setEmail] = useState('');
