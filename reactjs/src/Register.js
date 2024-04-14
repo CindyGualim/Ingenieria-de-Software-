@@ -1,5 +1,7 @@
 // Register.js
 import React, { useState } from 'react';
+import { handleRegisterClick, handleLoginClick } from './ContainerActions';  
+
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -11,6 +13,10 @@ const Register = () => {
     // Aquí añadirías la lógica para enviar los datos al servidor
     console.log('Registrando', { email, password, role });
     // ...
+  };
+
+   const toggleView = () => {
+    handleRegisterClick();  // Usa la función importada para cambiar a la vista de registro
   };
 
   return (

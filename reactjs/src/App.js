@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import Header from './components/Header';
 import Button from './components/Button';
 import Footer from './components/Footer';
 import Register from './Register';
+import { handleRegisterClick, handleLoginClick } from './ContainerActions'; 
 
 // Custom Input Component
 const Input = ({ type, placeholder, value, onChange }) => (
@@ -13,7 +14,33 @@ const Input = ({ type, placeholder, value, onChange }) => (
 function App() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showRegisterView, setShowRegisterView] = useState(false);  // Nuevo estado para controlar la visualización del registro
+  const [showRegisterView, setShowRegisterView] = useState(false);
+
+ useEffect(() => {
+    const container = document.getElementById('container');
+    const registerBtn = document.getElementById('register');
+    const loginBtn = document.getElementById('login');
+
+    if (container && registerBtn && loginBtn) {
+        const handleRegisterClick = () => {
+            container.classList.add("active");
+        };
+
+        const handleLoginClick = () => {
+            container.classList.remove("active");
+        };
+
+        registerBtn.addEventListener('click', handleRegisterClick);
+        loginBtn.addEventListener('click', handleLoginClick);
+
+        // Cleanup
+        return () => {
+            registerBtn.removeEventListener('click', handleRegisterClick);
+            loginBtn.removeEventListener('click', handleLoginClick);
+        };
+    }
+}, []);
+
 
   const handleLogin = async (event) => {
     // ... tu función de inicio de sesión existente ...
@@ -39,9 +66,8 @@ function App() {
               <Input type="email" placeholder="Correo Electrónico" value={email} onChange={e => setEmail(e.target.value)} />
               <Input type="password" placeholder="Ingresa tu contraseña" value={password} onChange={e => setPassword(e.target.value)} />
               <Button type="submit">Iniciar Sesión</Button>
+              <button onClick={toggleView} className="toggle-view">Registrarse</button>
             </form>
-            {/* Agregamos un botón para cambiar a la vista de registro */}
-            <button onClick={toggleView} className="toggle-view">Registrarse</button>
           </div>
         )}
       </div>
