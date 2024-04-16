@@ -51,3 +51,6 @@ esta es la segunda opcion para darle estilo al css de la pagina principa (App).
     padding: 15px; /* Relleno */
 }
 
+.boton-registrarse {
+    margin: 10px 0;
+}

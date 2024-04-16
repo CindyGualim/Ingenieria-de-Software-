@@ -40,8 +40,8 @@ function App() {
               <Input type="password" placeholder="Ingresa tu contraseña" value={password} onChange={e => setPassword(e.target.value)} />
               <Button type="submit">Iniciar Sesión</Button>
             </form>
-            {/* Agregamos un botón para cambiar a la vista de registro */}
-            <button onClick={toggleView} className="toggle-view">Registrarse</button>
+           {/* Usa la clase boton-registrarse en este botón */}
+           <button onClick={toggleView} className="boton-registrarse">Registrarse</button>
           </div>
         )}
       </div>
@@ -49,6 +49,7 @@ function App() {
     </div>
   );
 }
+
 
 export default App;
 
