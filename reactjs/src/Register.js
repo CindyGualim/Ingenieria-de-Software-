@@ -35,15 +35,18 @@ const Register = () => {
         <input
           type="password"
           value={password}
+          onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
           required
         />
         <input
           type="password"
           value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
           placeholder="Confirm Password"
           required
         />
+
         <select value={role} onChange={(e) => setRole(e.target.value)}>
           <option value="student">Student</option>
           <option value="tutor">Tutor</option>
