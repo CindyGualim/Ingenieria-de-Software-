@@ -46,7 +46,7 @@ const Register = () => {
           placeholder="Confirm Password"
           required
         />
-
+        {error && <div style={{ color: 'red' }}>{error}</div>}
         <select value={role} onChange={(e) => setRole(e.target.value)}>
           <option value="student">Student</option>
           <option value="tutor">Tutor</option>
