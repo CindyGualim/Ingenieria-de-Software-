@@ -9,7 +9,15 @@ app.use(express.json());  // Para parsear JSON en el cuerpo de las solicitudes
 
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
-    console.log(`Attempting login with email: ${email} and password: ${password}`);
+    console.log(Attempting login with email: ${email} and password: ${password});
+
+    // Verificar si el correo pertenece al dominio uvg.edu.gt
+    const domainRegex = /@uvg.edu.gt$/i;
+    if (!domainRegex.test(email)) {
+        return res.status(401).json({ success: false, message: "Invalid email domain. Only @uvg.edu.gt is allowed." });
+    }
+
+    // Continuar con la lógica de inicio de sesión si el correo es válido
     try {
         const connection = await pool.getConnection();
         try {
@@ -19,7 +27,9 @@ app.post('/login', async (req, res) => {
             );
             console.log(results);  // Ver qué está devolviendo la base de datos
             if (results.length > 0) {
-                res.json({ success: true, message: "Login successful", user: results[0] });
+                const user = results[0];
+                const token = jwt.sign({ id: user.id }, secretKey, { expiresIn: '2h' });
+                res.json({ success: true, message: "Login successful", token });
             } else {
                 res.status(401).json({ success: false, message: "Invalid credentials" });
             }
@@ -31,6 +41,7 @@ app.post('/login', async (req, res) => {
         res.status(500).json({ success: false, message: "Internal server error" });
     }
 });
+
 
 
 const PORT = 3001;
