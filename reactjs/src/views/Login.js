@@ -4,7 +4,7 @@ import Header from '../components/Header';
 import Button from '../components/Button';
 import Footer from '../components/Footer';
 import Register from './Register';
-import { handleRegisterClick, handleLoginClick } from '../ContainerActions'; 
+import { useNavigate } from 'react-router-dom'; 
 
 // Custom Input Component
 const Input = ({ type, placeholder, value, onChange }) => (
@@ -15,67 +15,54 @@ function App() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showRegisterView, setShowRegisterView] = useState(false);
+  const navigate = useNavigate(); // Hook para la navegación
 
- useEffect(() => {
+  useEffect(() => {
     const container = document.getElementById('container');
     const registerBtn = document.getElementById('register');
     const loginBtn = document.getElementById('login');
 
     if (container && registerBtn && loginBtn) {
-        const handleRegisterClick = () => {
-            container.classList.add("active");
-        };
+      const handleRegisterClick = () => container.classList.add("active");
+      const handleLoginClick = () => container.classList.remove("active");
 
-        const handleLoginClick = () => {
-            container.classList.remove("active");
-        };
+      registerBtn.addEventListener('click', handleRegisterClick);
+      loginBtn.addEventListener('click', handleLoginClick);
 
-        registerBtn.addEventListener('click', handleRegisterClick);
-        loginBtn.addEventListener('click', handleLoginClick);
-
-        // Cleanup
-        return () => {
-            registerBtn.removeEventListener('click', handleRegisterClick);
-            loginBtn.removeEventListener('click', handleLoginClick);
-        };
+      // Cleanup
+      return () => {
+          registerBtn.removeEventListener('click', handleRegisterClick);
+          loginBtn.removeEventListener('click', handleLoginClick);
+      };
     }
-}, []);
+  }, []);
 
-
-const handleLogin = async (event) => {
-  event.preventDefault();
-  console.log("Attempting to login with:", { email, password });
-
-  try {
-    const response = await fetch('/login', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, password })
-    });
-
-    console.log("Server response:", response);
-
-    if (!response.ok) {
-      try {
+  const handleLogin = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+  
+      if (!response.ok) {
         const errorData = await response.json();
         console.error('Server responded with:', errorData);
         alert(`Login failed: ${errorData.message}`);
-      } catch (jsonError) {
-        const errorText = await response.text();
-        console.error('Server responded with non-JSON:', errorText);
-        alert(`Login failed: ${errorText}`);
+        return;
       }
-      return;  // Exit the function after handling the error
+  
+      const data = await response.json();
+      localStorage.setItem('token', data.token); // Guarda el token recibido en localStorage
+      console.log('Login Successful:', data);
+      navigate('/sessions');
+    } catch (error) {
+      console.error('Login error:', error);
+      alert('Login failed: Unexpected error occurred.');
     }
-
-    const data = await response.json();
-    console.log('Login Successful:', data);
-    alert('Login Successful!');
-  } catch (error) {
-    console.error('Login error:', error);
-    alert('Login failed: Unexpected error occurred.');
-  }
-};
+  };
+  
 
   // Alternar entre la vista de inicio de sesión y registro
   const toggleView = () => {
@@ -87,10 +74,8 @@ const handleLogin = async (event) => {
       <Header title={showRegisterView ? "Registro" : "Iniciar Sesión"} />
       <div className='container' id='container'>
         {showRegisterView ? (
-          // Vista de registro
           <Register />
         ) : (
-          // Vista de inicio de sesión
           <div className='form-container sign-in'>
             <form onSubmit={handleLogin}>
               <span id='Loginsuggestions'>Usa tu correo electrónico y contraseña para iniciar sesión</span>
@@ -108,5 +93,3 @@ const handleLogin = async (event) => {
 }
 
 export default App;
-
-

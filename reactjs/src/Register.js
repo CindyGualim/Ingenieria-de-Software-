@@ -1,7 +1,4 @@
 import React, { useState } from 'react';
-import { handleRegisterClick, handleLoginClick } from '../ContainerActions';  
-import Button from '../components/Button';
-import './Register.css';
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -21,16 +18,13 @@ const Register = () => {
     setError('');
     // Aquí añadirías la lógica para enviar los datos al servidor
     console.log('Registrando', { email, password, role });
-  };
-
-   const toggleView = () => {
-    handleRegisterClick();  
+    // ...
   };
 
   return (
     <div className="register-container">
+      <h1>Register</h1>
       <form onSubmit={handleRegister}>
-        <span>Usa tu correo electrónico UVG</span>
         <input
           type="email"
           value={email}
@@ -41,26 +35,22 @@ const Register = () => {
         <input
           type="password"
           value={password}
+          onChange={(e) => setPassword(e.target.value)}
           placeholder="Password"
           required
         />
         <input
           type="password"
           value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
           placeholder="Confirm Password"
           required
         />
+        {error && <div style={{ color: 'red' }}>{error}</div>}
         <select value={role} onChange={(e) => setRole(e.target.value)}>
           <option value="student">Student</option>
           <option value="tutor">Tutor</option>
         </select>
-        <div className="select-container">
-          <select value={role} onChange={(e) => setRole(e.target.value)}>
-            <option value="student">Student</option>
-            <option value="tutor">Tutor</option>
-          </select>
-        </div>
-
         <button type="submit">Register</button>
       </form>
     </div>
@@ -68,4 +58,5 @@ const Register = () => {
 };
 
 export default Register;
+
 

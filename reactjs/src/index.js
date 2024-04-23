@@ -1,13 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './index.css';
 import Login from './views/Login';
+import Sessions from './views/Sessions'; // Asegúrate de tener este componente
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <Login />
+    <BrowserRouter>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/sessions" element={<Sessions />} />
+        {/* Puedes agregar más rutas aquí */}
+      </Routes>
+    </BrowserRouter>
   </React.StrictMode>
 );
 
