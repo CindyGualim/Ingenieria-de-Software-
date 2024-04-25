@@ -36,7 +36,8 @@
     "server": "nodemon src/connbackend/testing.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "test:cucumber": "npx cucumber-js"
   },
   "eslintConfig": {
     "extends": [
@@ -57,7 +58,12 @@
     ]
   },
   "devDependencies": {
+    "@babel/core": "^7.24.4",
+    "@babel/preset-env": "^7.24.4",
+    "@babel/register": "^7.23.7",
+    "@cucumber/cucumber": "^10.5.1",
     "concurrently": "^8.2.2",
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "puppeteer": "^22.7.0"
   }
 }

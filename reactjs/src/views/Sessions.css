@@ -55,6 +55,16 @@ body, html {
     border-radius: 10px; /* Bordes redondeados para el mensaje */
     box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Sombra suave para el mensaje */
   }
+
+  .yes-sessions{
+    font-size: 1.2rem;
+    color: #333333;
+    margin: 2rem 0;
+    padding: 2rem;
+    background-color: #FAE1DD; /* Fondo suave para el mensaje */
+    border-radius: 10px; /* Bordes redondeados para el mensaje */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Sombra suave para el mensaje */
+  }
   
   /* Botón para añadir nuevas sesiones, si aplica */
   .add-new-session {

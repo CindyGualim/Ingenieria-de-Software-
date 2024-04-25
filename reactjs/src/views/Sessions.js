@@ -11,50 +11,55 @@ function Sessions() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [periodo, setPeriodo] = useState('');  // Estado inicial vacío para el periodo
+  const [periodo, setPeriodo] = useState('');
 
   const handlePeriodChange = (e) => {
-    const newPeriodo = e.target.value;
-    setPeriodo(newPeriodo);  // Actualiza el periodo y desencadena un nuevo efecto
+    setPeriodo(e.target.value);
   };
 
-// Función para cargar sesiones
-const fetchSessions = async (queryPeriodo = '') => {
+  const fetchSessions = async (queryPeriodo = '') => {
     setLoading(true);
     const token = localStorage.getItem('token');
-    // Construye la URL basada en si hay un periodo especificado
     const url = new URL('http://localhost:3001/sessions');
     if (queryPeriodo) url.searchParams.append('periodo', queryPeriodo);
-    
+
     try {
-        const response = await fetch(url.toString(), {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`,
-                'Content-Type': 'application/json',
-            },
-        });
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        const data = await response.json();
-        setSessions(data.sessions || []);
+      const response = await fetch(url.toString(), {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+
+      // Transforma los datos antes de actualizar el estado
+      const transformedSessions = data.sessions.map((session) => ({
+        id: session.id,
+        date: new Date(session.dated).toLocaleDateString('es-ES'),
+        time: `${session.start_hour} - ${session.end_hour}`,
+        subject: `Curso: ${session.course_code}`, // Mostramos directamente el course_code
+      }));
+
+      setSessions(transformedSessions);
     } catch (error) {
-        console.error("Could not fetch sessions:", error);
-        setError(`Failed to fetch sessions: ${error.message || 'Unknown error'}`);
+      console.error("Could not fetch sessions:", error);
+      setError(`Failed to fetch sessions: ${error.message || 'Unknown error'}`);
     } finally {
-        setLoading(false);
+      setLoading(false);
     }
-};
-
-
+  };
 
   useEffect(() => {
-    fetchSessions();  // Carga inicial de todas las sesiones
+    fetchSessions();
   }, []);
 
   useEffect(() => {
-    if (periodo) {  // Realiza una carga condicional basada en el periodo seleccionado
+    if (periodo) {
       fetchSessions(periodo);
     }
   }, [periodo]);
@@ -81,15 +86,19 @@ const fetchSessions = async (queryPeriodo = '') => {
             <option value="noche">Noche</option>
           </select>
         </div>
-        <div>
-          {sessions.length > 0 ? sessions.map(session => (
-            <SessionCard
-              key={session.id}
-              date={session.date}
-              time={session.time}
-              subject={session.subject}
-            />
-          )) : <div className="no-sessions">No hay sesiones disponibles.</div>}
+        <div className='yes-sessions'>
+          {sessions.length > 0 ? (
+            sessions.map(session => (
+              <SessionCard
+                key={session.id}
+                date={session.date}
+                time={session.time}
+                subject={session.subject}
+              />
+            ))
+          ) : (
+            <div className="no-sessions">No hay sesiones disponibles.</div>
+          )}
         </div>
       </div>
     </>
