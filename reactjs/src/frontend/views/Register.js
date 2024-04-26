@@ -50,10 +50,7 @@ const Register = () => {
           placeholder="Confirm Password"
           required
         />
-        <select value={role} onChange={(e) => setRole(e.target.value)}>
-          <option value="student">Student</option>
-          <option value="tutor">Tutor</option>
-        </select>
+      
         <div className="select-container">
           <select value={role} onChange={(e) => setRole(e.target.value)}>
             <option value="student">Student</option>

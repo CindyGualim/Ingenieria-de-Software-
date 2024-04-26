@@ -11,7 +11,7 @@ const Input = ({ type, placeholder, value, onChange }) => (
   <input type={type} placeholder={placeholder} value={value} onChange={onChange} />
 );
 
-function App() {
+function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showRegisterView, setShowRegisterView] = useState(false);
@@ -92,4 +92,4 @@ function App() {
   );
 }
 
-export default App;
+export default Login;
