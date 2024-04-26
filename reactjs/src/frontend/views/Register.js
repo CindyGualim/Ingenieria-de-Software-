@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { handleRegisterClick, handleLoginClick } from '../ContainerActions';  
-import Button from '../components/Button';
-import './Register.css';
+import { handleRegisterClick, handleLoginClick } from '../../ContainerActions';  
+import Button from '../components/Button.js';
+import '../css/Register.css';
 
 const Register = () => {
   const [email, setEmail] = useState('');

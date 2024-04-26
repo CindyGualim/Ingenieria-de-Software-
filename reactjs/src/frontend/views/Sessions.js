@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import SessionCard from '../components/Card';
 import Sidebar from '../components/Sidebar';
 import Navbar from '../components/Navbar';
-import './Sessions.css';
-import './Sidebar.css';
-import './Navbar.css';
+import '../css/Sessions.css';
+import '../css/Sidebar.css';
+import '../css/Navbar.css';
 
 function Sessions() {
   const [sessions, setSessions] = useState([]);

@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const pool = require('./Connection');  // Asumiendo que tu archivo se llama Connection.js y está en la carpeta connbackend
+const pool = require('./Connection');  // Asumiendo que tu archivo se llama Connection.js y está en la carpeta backend
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const secretKey = process.env.JWT_SECRET || 'tu_secreto_aqui'; // Utiliza una variable de entorno para tu secreto
