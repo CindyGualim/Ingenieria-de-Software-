@@ -19,9 +19,13 @@ function Sessions() {
 
   const fetchSessions = async (queryPeriodo = '') => {
     setLoading(true);
+    setError(null); // Limpiar errores anteriores
     const token = localStorage.getItem('token');
     const url = new URL('http://localhost:3001/sessions');
-    if (queryPeriodo) url.searchParams.append('periodo', queryPeriodo);
+
+    if (queryPeriodo) {
+      url.searchParams.append('periodo', queryPeriodo);
+    }
 
     try {
       const response = await fetch(url.toString(), {
@@ -36,15 +40,12 @@ function Sessions() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const data = await response.json();
-
-      // Transforma los datos antes de actualizar el estado
       const transformedSessions = data.sessions.map((session) => ({
         id: session.id,
         date: new Date(session.dated).toLocaleDateString('es-ES'),
         time: `${session.start_hour} - ${session.end_hour}`,
-        subject: `Curso: ${session.course_code}`, // Mostramos directamente el course_code
+        subject: `Curso: ${session.course_code}`,
       }));
-
       setSessions(transformedSessions);
     } catch (error) {
       console.error("Could not fetch sessions:", error);
@@ -55,13 +56,11 @@ function Sessions() {
   };
 
   useEffect(() => {
-    fetchSessions();
+    fetchSessions();  // Carga inicial sin filtros
   }, []);
 
   useEffect(() => {
-    if (periodo) {
-      fetchSessions(periodo);
-    }
+    fetchSessions(periodo);  // Carga en cada cambio de 'periodo'
   }, [periodo]);
 
   const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
