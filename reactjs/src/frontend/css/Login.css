@@ -41,7 +41,7 @@
     text-decoration: none;
     margin: 15px 0 10px;
 }
-.container button{
+.container Button{
     background-color: #C67A53;
     color: #fff;
     font-size: 15px;
@@ -67,7 +67,7 @@
     margin-top: 10px;
     cursor: pointer;
 }
-.container button.hidden{
+.container Button.hidden{
     background-color: transparent;
     border-color: #fff;
 }

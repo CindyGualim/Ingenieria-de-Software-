@@ -82,7 +82,7 @@ function Login() {
               <Input type="email" placeholder="Correo Electrónico" value={email} onChange={e => setEmail(e.target.value)} />
               <Input type="password" placeholder="Ingresa tu contraseña" value={password} onChange={e => setPassword(e.target.value)} />
               <Button type="submit">Iniciar Sesión</Button>
-              <button onClick={toggleView} className="toggle-view">Registrarse</button>
+              <Button onClick={toggleView} className="toggle-view">Registrarse</Button>
             </form>
           </div>
         )}

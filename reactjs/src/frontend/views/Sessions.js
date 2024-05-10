@@ -99,7 +99,7 @@ function Sessions() {
             <div className="no-sessions">No hay sesiones disponibles.</div>
           )}
         </div>
-      </div>
+      </div>  
     </>
   );
 }

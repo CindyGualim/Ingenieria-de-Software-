@@ -17,7 +17,7 @@
   right: 0; /* Mueve la sidebar hacia adentro */
 }
 
-.sidebar button {
+.sidebar Button {
   background-color: #FF6B6B;
   color: white;
   border: none;
@@ -30,7 +30,7 @@
 }
 
 /* Botón para cerrar la sidebar */
-.sidebar button.close-btn {
+.sidebar Button.close-btn {
   position: absolute;
   top: 10px;
   left: 10px;

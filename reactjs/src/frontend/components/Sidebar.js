@@ -1,9 +1,11 @@
 import React from 'react';
+import Button from '../components/Button.js';
+
 
 const Sidebar = ({ isOpen, closeSidebar }) => {
   return (
     <div className={`sidebar ${isOpen ? 'open' : ''}`}>
-      <button onClick={closeSidebar} className="close-sidebar">X</button>
+      <Button onClick={closeSidebar} className="close-sidebar">X</Button>
       <ul className="sidebar-items">
         <li>Perfil</li>
         <li>Buscar Tutores</li>

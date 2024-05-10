@@ -24,11 +24,11 @@ esta es la segunda opcion para darle estilo al css de la pagina principa (App).
     }
 }
 
-.container input, .container button {
+.container input, .container Button {
     margin: 10px 0; /* Espaciado entre los elementos */
 }
 
-.container button {
+.container Button {
     background-color: #C67A53; /* Color de fondo del botón */
     color: #fff; /* Color del texto del botón */
     padding: 10px 45px; /* Espaciado interno del botón */

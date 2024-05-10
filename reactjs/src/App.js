@@ -41,7 +41,7 @@ function App() {
               <Button type="submit">Iniciar Sesión</Button>
             </form>
            {/* Usa la clase boton-registrarse en este botón */}
-           <button onClick={toggleView} className="boton-registrarse">Registrarse</button>
+           <Button onClick={toggleView} className="boton-registrarse">Registrarse</Button>
           </div>
         )}
       </div>

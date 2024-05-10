@@ -4,6 +4,8 @@ const pool = require('./Connection');  // Asumiendo que tu archivo se llama Conn
 const cors = require('cors');
 const jwt = require('jsonwebtoken');
 const secretKey = process.env.JWT_SECRET || 'tu_secreto_aqui'; // Utiliza una variable de entorno para tu secreto
+const bcrypt = require('bcrypt'); // Asegúrate de que bcrypt esté importado
+
 
 const app = express();
 app.use(cors());  // Permite solicitudes CORS de tu frontend
@@ -22,29 +24,33 @@ const authenticateToken = (req, res, next) => {
     });
 };
 
+// Endpoint de login
 app.post('/login', async (req, res) => {
     const { email, password } = req.body;
     console.log(`Attempting login with email: ${email} and password: ${password}`);
 
-    // Verificar si el correo pertenece al dominio uvg.edu.gt
     const domainRegex = /@uvg\.edu\.gt$/i;
     if (!domainRegex.test(email)) {
         return res.status(401).json({ success: false, message: "Invalid email domain. Only @uvg.edu.gt is allowed." });
     }
 
-    // Continuar con la lógica de inicio de sesión si el correo es válido
     try {
         const connection = await pool.getConnection();
         try {
             const [results] = await connection.query(
-                'SELECT id FROM user WHERE email = ? AND password = ?',
-                [email, password]
+                'SELECT id, password FROM user WHERE email = ?',
+                [email]
             );
-            console.log(results);  // Ver qué está devolviendo la base de datos
+
             if (results.length > 0) {
                 const user = results[0];
-                const token = jwt.sign({ id: user.id }, secretKey, { expiresIn: '1h' });
-                res.json({ success: true, message: "Login successful", token });
+                const passwordMatch = await bcrypt.compare(password, user.password);
+
+                if (passwordMatch) {
+                    res.json({ success: true, message: "Login successful", user: { id: user.id } });
+                } else {
+                    res.status(401).json({ success: false, message: "Invalid credentials" });
+                }
             } else {
                 res.status(401).json({ success: false, message: "Invalid credentials" });
             }
@@ -59,23 +65,52 @@ app.post('/login', async (req, res) => {
 
 
 
-// app.get('/sessions', authenticateToken, async (req, res) => {
-//     try {
-//       const userId = req.user.id;
-//       const query = 'SELECT * FROM students_Session WHERE id_student = ?';
-//       const [results] = await pool.query(query, [userId]);
-//       if (results.length > 0) {
-//         res.json(results);
-//       } else {
-//         // Cambia aquí para enviar una respuesta 200 con un mensaje y un array vacío
-//         res.json({ success: true, message: "No sessions found", sessions: [] });
-//       }
-//     } catch (error) {
-//       console.error('Database error:', error);
-//       res.status(500).json({ success: false, message: "Internal server error" });
-//     }
-//   });
-  
+// Endpoint para hacer el registro de nuevos usuarios
+app.post('/register', async (req, res) => {
+    const { username, email, password, role } = req.body;
+    console.log(`Attempting to register a new user with username: ${username}, email: ${email}, role: ${role}`);
+
+    // Verificar si el correo pertenece al dominio uvg.edu.gt
+    const domainRegex = /@uvg\.edu\.gt$/i;
+    if (!domainRegex.test(email)) {
+        return res.status(401).json({ success: false, message: "Invalid email domain. Only @uvg.edu.gt is allowed." });
+    }
+
+    // Asignar el valor numérico adecuado a typeuser (1 = student, 2 = tutor)
+    const typeuser = role === 'student' ? 1 : 2;
+
+    try {
+        const connection = await pool.getConnection();
+        try {
+            // Verificar si el usuario ya existe
+            const [existingUser] = await connection.query('SELECT id FROM user WHERE email = ?', [email]);
+            if (existingUser.length > 0) {
+                return res.status(409).json({ success: false, message: "User already exists" });
+            }
+
+            // Obtener el id más alto y calcular el siguiente
+            const [maxResult] = await connection.query('SELECT MAX(id) AS maxId FROM user');
+            const nextId = (maxResult[0].maxId || 0) + 1;
+
+            // Encriptar la contraseña
+            const hashedPassword = await bcrypt.hash(password, 10);
+
+            // Insertar el nuevo usuario con el id calculado
+            const [result] = await connection.query(
+                'INSERT INTO user (id, username, email, password, typeuser) VALUES (?, ?, ?, ?, ?)',
+                [nextId, username, email, hashedPassword, typeuser]
+            );
+
+            console.log('User registered successfully:', result.insertId);
+            res.json({ success: true, message: "User registered successfully", userId: result.insertId });
+        } finally {
+            connection.release();
+        }
+    } catch (error) {
+        console.error('Database error:', error);
+        res.status(500).json({ success: false, message: "Internal server error" });
+    }
+});
 
 
 
@@ -122,6 +157,7 @@ app.get('/sessions', authenticateToken, async (req, res) => {
     }
 });
 
+
 // Esta función ahora simplemente devuelve los tiempos de inicio y fin para el periodo dado
 function getPeriodoTimes(periodo) {
     let tiempoInicio, tiempoFin;
@@ -144,11 +180,8 @@ function getPeriodoTimes(periodo) {
     return { tiempoInicio, tiempoFin };
 };
 
-  
 
 const PORT = 3001;
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });
-
-
