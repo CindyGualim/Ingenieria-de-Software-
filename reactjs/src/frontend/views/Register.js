@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
-import Button from '../components/Button.js';
+import { useNavigate } from 'react-router-dom';
+import Header from '../components/Header';
+import Button from '../components/Button';
+import Footer from '../components/Footer';
+
 import '../css/Register.css';
-import { useNavigate } from 'react-router-dom'; 
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -10,8 +13,7 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [role, setRole] = useState('student');
   const [error, setError] = useState('');
-  const navigate = useNavigate(); // Hook para la navegación
-
+  const navigate = useNavigate();
 
   const handleRegister = async (event) => {
     event.preventDefault();
@@ -32,7 +34,8 @@ const Register = () => {
 
       if (data.success) {
         alert('Registro exitoso');
-        navigate('/login'); // Redirige a la vista de inicio de sesión
+        // Utilizar setTimeOut para asegurarse de que la vista se actualice correctamente
+        setTimeout(() => navigate('/login'), 100); // Retrasa la navegación para dar tiempo a las actualizaciones de estado
       } else {
         setError(data.message);
       }
@@ -43,46 +46,50 @@ const Register = () => {
   };
 
   return (
-    <div className="register-container">
-      <form onSubmit={handleRegister}>
-        <span>Usa tu correo electrónico UVG</span>
-        <input
-          type="text"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          placeholder="Username"
-          required
-        />
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-          required
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Password"
-          required
-        />
-        <input
-          type="password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-          placeholder="Confirm Password"
-          required
-        />
-        <div className="select-container">
-          <select value={role} onChange={(e) => setRole(e.target.value)}>
-            <option value="student">Student</option>
-            <option value="tutor">Tutor</option>
-          </select>
-        </div>
-        {error && <span className="error">{error}</span>}
-        <Button type="submit">Register</Button>
-      </form>
+    <div>
+      <Header title="Registro" />
+      <div className="register-container">
+        <form onSubmit={handleRegister}>
+          <span>Usa tu correo electrónico UVG</span>
+          <input
+            type="text"
+            value={username}
+            onChange={e => setUsername(e.target.value)}
+            placeholder="Username"
+            required
+          />
+          <input
+            type="email"
+            value={email}
+            onChange={e => setEmail(e.target.value)}
+            placeholder="Email"
+            required
+          />
+          <input
+            type="password"
+            value={password}
+            onChange={e => setPassword(e.target.value)}
+            placeholder="Password"
+            required
+          />
+          <input
+            type="password"
+            value={confirmPassword}
+            onChange={e => setConfirmPassword(e.target.value)}
+            placeholder="Confirm Password"
+            required
+          />
+          <div className="select-container">
+            <select value={role} onChange={e => setRole(e.target.value)}>
+              <option value="student">Student</option>
+              <option value="tutor">Tutor</option>
+            </select>
+          </div>
+          {error && <span className="error">{error}</span>}
+          <Button type="submit">Register</Button>
+        </form>
+      </div>
+      <Footer />
     </div>
   );
 };
