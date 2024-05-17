@@ -11,7 +11,7 @@ const app = express();
 app.use(cors());  // Permite solicitudes CORS de tu frontend
 app.use(express.json());  // Para parsear JSON en el cuerpo de las solicitudes
 
-
+// Middleware para autenticar token
 const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
@@ -23,6 +23,7 @@ const authenticateToken = (req, res, next) => {
         next();
     });
 };
+
 
 // Endpoint de login
 app.post('/login', async (req, res) => {
@@ -47,7 +48,8 @@ app.post('/login', async (req, res) => {
                 const passwordMatch = await bcrypt.compare(password, user.password);
 
                 if (passwordMatch) {
-                    res.json({ success: true, message: "Login successful", user: { id: user.id } });
+                    const token = jwt.sign({ id: user.id }, secretKey, { expiresIn: '1h' });
+                    res.json({ success: true, message: "Login successful", token });
                 } else {
                     res.status(401).json({ success: false, message: "Invalid credentials" });
                 }
@@ -62,6 +64,7 @@ app.post('/login', async (req, res) => {
         res.status(500).json({ success: false, message: "Internal server error" });
     }
 });
+
 
 
 

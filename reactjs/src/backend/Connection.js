@@ -12,7 +12,7 @@ const pool = mysql.createPool({
         connectionLimit: 100,
         queueLimit: 0,
         ssl: {
-            ca: readFileSync('src/backend/ca-certificate.crt')
+            ca: readFileSync('./src/backend/ca-certificate.crt')
         }
 });
 
